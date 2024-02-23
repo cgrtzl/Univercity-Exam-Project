@@ -1,0 +1,101 @@
+.sidebar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #ccc;
+}
+
+.sidebar .sidebar-header {
+  padding: 10px;
+  background-color: #fff;
+}
+
+.sidebar .nav-pills {
+  margin-bottom: 0;
+}
+
+.sidebar .nav-link {
+  display: block;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.sidebar .nav-link img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.new-sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f0f0f0;
+  padding: 10px;
+  z-index: 1;
+  text-align: right;
+  width: 200px;
+}
+
+.new-sidebar h3,
+.new-sidebar p {
+  margin: 0;
+  padding: 5px 0;
+}
+
+.new-sidebar .timer {
+  margin-top: 10px;
+}
+
+.modal-body {
+  position: relative; /* Modal içeriği göreli pozisyonlu yapın */
+}
+
+.modal-dialog {
+  max-width: calc(100% - 200px); /* new-sidebar'ı hesaplamalara dahil etmeyin */
+}
+
+.timer {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.total-questions,
+.selected-questions {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.progress {
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+  background-color: #337ab7;
+  color: white;
+}
+
+.countdown-container {
+  background-color: #ffecb3; /* Açık sarı arka plan rengi */
+  padding: 5px 10px; /* Dolgu ekleyin */
+  border-radius: 10px; /* Köşeleri yuvarlayın */
+  text-align: center; /* Metni ortala */
+  color: #333; /* Metin rengi */
+}
+
+.countdown-text {
+  font-size: 14px; /* Metin boyutu */
+  margin-bottom: 5px; /* Metin ile sayacın arasındaki boşluğu ayarlar */
+}
+
+.countdown-timer {
+  font-size: 18px; /* Sayacın metin boyutu */
+  font-weight: bold; /* Kalın metin */
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}

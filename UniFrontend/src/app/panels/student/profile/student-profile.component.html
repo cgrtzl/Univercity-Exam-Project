@@ -1,0 +1,65 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="sidebar">
+          <div class="sidebar-header">
+            <h3>{{currentUser.name}}</h3>
+          </div>
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a class="nav-link"
+              [ngStyle]="{ 'cursor': activeContent === 'profile'}">
+                <img src="https://img.icons8.com/ios-filled/50/000000/user.png">
+                Profile
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" (click)="goToStudentExam()"
+              [ngStyle]="{ 'cursor': activeContent === 'exams' ? 'default' : 'pointer' }">
+                <img src="https://img.icons8.com/ios-filled/50/000000/book.png">
+                Exams
+              </a>
+            </li>
+            <li class="nav-item" style="margin-bottom: 5em;">
+              <button (click)="logout()" class="btn">
+                <img src="https://img.icons8.com/ios-filled/50/000000/power-off-button.png">
+                <span style="color: red"> Logout</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h4>Profile</h4>
+              </div>
+              <div class="card-body">
+                <p><strong>Name:</strong> {{ currentUser.name }}</p>
+                <p><strong>Number:</strong> {{ currentUser.number }}</p>
+                <p><strong>Classroom:</strong> {{ currentUser.classroom.name }}</p>
+                <hr>
+                <p><strong>Change Password</strong></p>
+                <form (ngSubmit)="updatePassword()" #passwordForm="ngForm">
+                  <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" class="form-control" id="currentPassword" name="currentPassword" required [(ngModel)]="currentPassword">
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword" [(ngModel)]="newPassword" minlength="8">
+                    <small *ngIf="newPassword && newPassword.length < 8" class="text-danger">Password must be at least 8 characters long.</small>
+                    <small *ngIf="newPassword === currentUser.password" class="text-danger">New password can't be same with current password.</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" [(ngModel)]="confirmNewPassword">
+                    <small *ngIf="confirmNewPassword && confirmNewPassword !== newPassword" class="text-danger">Passwords do not match.</small>
+                  </div>
+                  <button type="submit" class="btn btn-primary" [disabled]="!passwordForm.form.valid">Change Password</button>
+                </form>
+              </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,21 @@
+Bir üniversitenin sınıfları ve bu sınıfların öğrencileri mevcuttur. Öncelikle sınıfları kaydedip, bu sınıflara öğrencileri eklemelisiniz. Sonrasında bu kaydedilen öğrencilere web sitesi üzerinden sınav hazırlamanız beklenmektedir. Sınav hazırlama işlemi şu şekilde olacaktır:
+
+Yönetici, istediği sayıda sorudan oluşan bir sınav hazırlayacaktır. Sorular puanlandırılacak ve her soru için 1 başlık, 5 şık ve 1 doğru cevap belirlenmelidir.
+
+Yönetici oluşturduğu sınavı belirli sınıflara atayacak ve sınavın yapılacağı bir tarih belirleyecektir.
+
+Belirtilen tarihte, sadece o sınıfa ait olan öğrenciler sınava girebilecek ve soruları cevaplayabilecektir.
+
+Öğrencilerin bu sınavdan aldıkları bir not olacaktır.
+
+--------------
+
+A university has classes and students in these classes. First, you must save the classes and add students to these classes. Afterwards, you are expected to prepare exams for these registered students via the website. The exam preparation process will be as follows:
+
+The administrator will prepare an exam consisting of the desired number of questions. The questions will be scored and for each question, 1 title, 5 choices and 1 correct answer must be determined.
+
+The administrator will assign the exam he created to specific classes and determine a date when the exam will be held.
+
+On the specified date, only students belonging to that class will be able to take the exam and answer the questions.
+
+Students will have a grade they receive from this exam.

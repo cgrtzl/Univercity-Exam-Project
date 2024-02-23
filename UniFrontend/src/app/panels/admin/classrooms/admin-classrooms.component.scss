@@ -1,0 +1,28 @@
+.sidebar {
+    position: fixed;
+    width: 200px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #ccc;
+  }
+  
+  .sidebar .sidebar-header {
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+  .sidebar .nav-pills {
+    margin-bottom: 0;
+  }
+  
+  .sidebar .nav-link {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar .nav-link img {
+    width: 40px;
+    margin-right: 10px;
+  }

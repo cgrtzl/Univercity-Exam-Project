@@ -1,0 +1,197 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Admin Panel</h3>
+                </div>
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" [ngStyle]="{ 'cursor': activeContent === 'students'}">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/user.png">
+                            Students
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="goToAdminClassroom()"
+                            [ngStyle]="{ 'cursor': activeContent === 'classrooms' ? 'default' : 'pointer' }">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/classroom.png">
+                            Classrooms
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="goToExamClassroom()"
+                            [ngStyle]="{ 'cursor': activeContent === 'exams' ? 'default' : 'pointer' }">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/book.png">
+                            Exams
+                        </a>
+                    </li>
+                    <li class="nav-item" style="margin-bottom: 5em;">
+                        <button (click)="logout()" class="btn">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/power-off-button.png">
+                            <span style="color: red"> Logout</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Students</h4>
+                    <button type="button" class="btn btn-primary" (click)="openCreateStudentModal()">Create New
+                        Student</button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Name</th>
+                                <th class="text-center align-middle">Number</th>
+                                <th class="text-center align-middle">Password</th>
+                                <th class="text-center align-middle">Classroom</th>
+                                <th class="text-center align-middle">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let student of students">
+                                <td class="text-center align-middle">
+                                    <a href="javascript:void(0)" (click)="openStudentResultsModal(student)">{{ student.name }}</a>
+                                </td>
+                                <td class="text-center align-middle">{{ student.number }}</td>
+                                <td class="text-center align-middle">{{ student.password }}</td>
+                                <td class="text-center align-middle">{{ student.classroom.name }}</td>
+                                <td class="text-center align-middle">
+                                    <button class="btn btn-sm btn-primary"
+                                        (click)="openEditStudentModal(student)">Edit</button>
+                                    <button class="btn btn-sm btn-danger"
+                                        (click)="deleteStudentWithRelatedEntities(student)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="editStudentModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="updatedStudentName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="updatedStudentName" [(ngModel)]="updatedStudentName"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="updatedStudentNumber" class="form-label">Number</label>
+                    <input type="text" class="form-control" id="updatedStudentNumber" [(ngModel)]="updatedStudentNumber"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="updatedStudentPassword" class="form-label">Password</label>
+                    <input type="text" class="form-control" id="updatedStudentPassword"
+                        [(ngModel)]="updatedStudentPassword" required>
+                </div>
+                <div class="mb-3">
+                    <label for="updatedStudentClassroom" class="form-label">Classroom</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="classroomForStudentDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ updatedStudentClassroom?.name || 'Select Classroom' }}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="classroomDropdown">
+                            <a class="dropdown-item" *ngFor="let classroom of classrooms"
+                                (click)="selectClassroomForStudent(classroom)">{{ classroom.name }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="updateStudent()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createStudentModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newStudentName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="newStudentName" [(ngModel)]="newStudentName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newStudentNumber" class="form-label">Number</label>
+                    <input type="text" class="form-control" id="newStudentNumber" [(ngModel)]="newStudentNumber"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="newStudentPassword" class="form-label">Password</label>
+                    <input type="text" class="form-control" id="newStudentPassword" [(ngModel)]="newStudentPassword"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="newStudentClassroom" class="form-label">Classroom</label>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="classroomDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ selectedStudentClassroom?.name || 'Select Classroom' }}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="classroomDropdown">
+                            <a class="dropdown-item" *ngFor="let classroom of classrooms"
+                                (click)="selectStudentClassroom(classroom)">{{ classroom.name }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="createStudent()">Create Student</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="studentResultsModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ selectedStudent?.name }}'s Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Exam Name</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let result of getStudentsResults(selectedStudent!)">
+                            <td>{{ result.exam.name }}</td>
+                            <td>{{ result.score }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

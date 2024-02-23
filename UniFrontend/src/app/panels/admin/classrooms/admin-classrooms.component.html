@@ -1,0 +1,155 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Admin Panel</h3>
+                </div>
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="goToAdminStudent()"
+                            [ngStyle]="{ 'cursor': activeContent === 'students' ? 'default' : 'pointer'}">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/user.png">
+                            Students
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngStyle]="{ 'cursor': activeContent === 'classrooms'}">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/classroom.png">
+                            Classrooms
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="goToAdminExam()"
+                            [ngStyle]="{ 'cursor': activeContent === 'exams' ? 'default' : 'pointer' }">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/book.png">
+                            Exams
+                        </a>
+                    </li>
+                    <li class="nav-item" style="margin-bottom: 5em;">
+                        <button (click)="logout()" class="btn">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/power-off-button.png">
+                            <span style="color: red"> Logout</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Classrooms</h4>
+                    <button type="button" class="btn btn-primary" (click)="openCreateClassroomModal()">Create New
+                        Classroom</button>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center align-middle">Name</th>
+                                <th class="text-center align-middle">Population</th>
+                                <th class="text-center align-middle">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let classroom of classrooms">
+                                <td class="text-center align-middle">{{ classroom.name }}</td>
+                                <td class="text-center align-middle">
+                                    <a href="javascript:void(0)"
+                                        (click)="getStudentCount(classroom) > 0 ? openStudentListModal(classroom) : null"
+                                        [style.color]="getStudentCount(classroom) > 0 ? 'blue' : 'grey'"
+                                        [style.pointer-events]="getStudentCount(classroom) > 0 ? 'auto' : 'none'">
+                                        {{ getStudentCount(classroom) }}
+                                    </a>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                        <button class="btn btn-sm btn-primary"
+                                            (click)="openEditClassroomModal(classroom)">Edit</button>
+                                        <button class="btn btn-sm btn-danger"
+                                            (click)="deleteClassroom(classroom)">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="editClassroomModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Classroom</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" [(ngModel)]="updatedClassName">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="updateClassroom()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createClassroomModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Classroom</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="newClassName" class="form-label">Class Name</label>
+                    <input type="text" class="form-control" id="newClassName" name="newClassName" [(ngModel)]="newClassName" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="createClassroom(newClassName)">Create New
+                    Classroom</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="studentListModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ selectedClassroom?.name }} Students</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Number</th>
+                            <th class="text-center">Password</th>
+                            <th class="text-center">Classroom</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let student of studentsInSelectedClassroom">
+                            <td class="text-center">{{ student.name }}</td>
+                            <td class="text-center">{{ student.number }}</td>
+                            <td class="text-center">{{ student.password }}</td>
+                            <td class="text-center">{{ student.classroom.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

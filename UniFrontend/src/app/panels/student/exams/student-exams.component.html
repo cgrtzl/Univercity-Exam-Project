@@ -1,0 +1,141 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h3>{{currentUser.name}}</h3>
+        </div>
+        <ul class="nav nav-pills flex-column">
+          <li class="nav-item">
+            <a class="nav-link" (click)="goToStudentProfile()"
+              [ngStyle]="{ 'cursor': activeContent === 'profile' ? 'default' : 'pointer' }">
+              <img src="https://img.icons8.com/ios-filled/50/000000/user.png">
+              Profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [ngStyle]="{ 'cursor': activeContent === 'exams'}">
+              <img src="https://img.icons8.com/ios-filled/50/000000/book.png">
+              Exams
+            </a>
+          </li>
+          <li class="nav-item" style="margin-bottom: 5em;">
+            <button (click)="logout()" class="btn">
+              <img src="https://img.icons8.com/ios-filled/50/000000/power-off-button.png">
+              <span style="color: red"> Logout</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4>Exams</h4>
+        </div>
+        <div class="card-body">
+          <div class="text-center">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Date and Duration</th>
+                <th>Status</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let exam of usersExams">
+                <td class="vertical-align-middle">{{ exam.name }}</td>
+                <td class="vertical-align-middle">{{ exam.startDate | date: 'dd-MM-yyyy HH:mm:ss' }}<br>{{ exam.endDate | date: 'dd-MM-yyyy HH:mm:ss'
+                  }}<br>Duration: {{ exam.duration }} minutes</td>
+                <td class="vertical-align-middle">
+                  <span *ngIf="getResultScoreForExam(exam) === 'N/A' && examStatuses[exam.id!] === 'Active'">
+                    {{ examStatuses[exam.id!]}} <br> <button class="btn btn-primary" (click)="startExam(exam)"
+                    [disabled]="examStatuses[exam.id!] !== 'Active'">Start Exam</button>
+                  </span>
+                  <span *ngIf="getResultScoreForExam(exam) === 'N/A' && examStatuses[exam.id!] !== 'Active'">
+                    {{ examStatuses[exam.id!]}} <br> <button class="btn btn-primary" (click)="startExam(exam)"
+                    [disabled]="examStatuses[exam.id!] !== 'Active'">Start Exam</button>
+                  </span>
+                  <span *ngIf="getResultScoreForExam(exam) !== 'N/A' && examStatuses[exam.id!] === 'Active' ">
+                    Exam Completed
+                  </span>
+                  <span *ngIf="getResultScoreForExam(exam) !== 'N/A' && examStatuses[exam.id!] !== 'Active' ">
+                    Exam Completed
+                  </span>
+                </td>
+                <td class="vertical-align-middle">
+                  {{ getResultScoreForExam(exam) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- takeExamModal -->
+<div class="modal fade" id="takeExamModal" tabindex="-1" aria-labelledby="takeExamModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="takeExamModalLabel">{{ selectedExam?.name }}</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-9" style="max-height: 70vh; overflow-y: auto;">
+            <div *ngFor="let question of questionsForExam">
+              <div class="card">
+                <div class="card-header">
+                  {{question.questionNumber}}.  {{ question.title }}
+                </div>
+                <div class="card-body">
+                  <div *ngFor="let choice of getChoicesForQuestion(question)">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="question{{ question.id }}"
+                        id="choice{{ choice.id }}"
+                        [(ngModel)]="selectedChoices[question.id!]"
+                        [value]="choice.id"
+                      />
+                      <label class="form-check-label" for="choice{{ choice.id }}">
+                        {{ choice.name }}. {{ choice.description }}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="new-sidebar">
+              <div class="text-center">
+                <h3>{{ currentUser.name }}</h3>
+                <p>Student Number: {{ currentUser.number }}</p>
+                <p class="total-questions">Total Questions: {{ questionsForExam.length }}</p>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [style.width]="countSelectedChoices() / questionsForExam.length * 100 + '%'"></div>
+                </div>
+                <p class="selected-questions">Selected Questions: {{ countSelectedChoices() }}</p>
+                <div class="countdown-container">
+                  <p class="countdown-text">Time Remaining:</p>
+                  <div class="countdown-timer" id="timer">00:00</div>
+                </div>                
+              </div><br>
+              <div class="text-center">
+                <button type="button" class="btn btn-primary" (click)="submitExam()">Submit</button>
+              </div>
+            </div>            
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
